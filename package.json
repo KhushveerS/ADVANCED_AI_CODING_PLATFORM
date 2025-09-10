@@ -1,0 +1,38 @@
+{
+  "name": "adavec-ai-coding-platform",
+  "version": "1.0.0",
+  "description": "A comprehensive platform for practicing Data Structures & Algorithms and Competitive Programming problems from LeetCode and Codeforces",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start"
+  },
+  "keywords": [
+    "dsa",
+    "competitive-programming",
+    "leetcode",
+    "codeforces",
+    "nextjs",
+    "express",
+    "typescript"
+  ],
+  "author": "KhushveerS",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KhushveerS/ADVANCED_AI_CODING_PLATFORM.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KhushveerS/ADVANCED_AI_CODING_PLATFORM/issues"
+  },
+  "homepage": "https://github.com/KhushveerS/ADVANCED_AI_CODING_PLATFORM#readme"
+}
