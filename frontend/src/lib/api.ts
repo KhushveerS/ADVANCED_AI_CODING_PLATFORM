@@ -1,4 +1,4 @@
-import { Problem, ApiResponse } from '@/types';
+import { Problem, ApiResponse, SheetMeta, SheetProblemItem } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -37,6 +37,45 @@ export const api = {
 
   async getCPRatingRanges(): Promise<ApiResponse<Array<{ min: number; max: number; label: string }>>> {
     const response = await fetch(`${API_BASE_URL}/cp/rating-ranges`);
+    return response.json();
+  },
+
+  // Sheets
+  async getSheets(): Promise<ApiResponse<SheetMeta[]>> {
+    const response = await fetch(`${API_BASE_URL}/sheets`);
+    return response.json();
+  },
+
+  async getSheetProblems(key: string): Promise<ApiResponse<SheetProblemItem[]>> {
+    const response = await fetch(`${API_BASE_URL}/sheets/${key}`);
+    return response.json();
+  },
+
+  // AI
+  async aiExplain(params: { title: string; url?: string; details?: string }): Promise<ApiResponse<string>> {
+    const response = await fetch(`${API_BASE_URL}/ai/explain`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return response.json();
+  },
+
+  async aiHints(params: { title: string; url?: string; currentThought?: string }): Promise<ApiResponse<string>> {
+    const response = await fetch(`${API_BASE_URL}/ai/hints`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return response.json();
+  },
+
+  async aiSolution(params: { title: string; url?: string; language: 'c' | 'cpp' | 'java' }): Promise<ApiResponse<string>> {
+    const response = await fetch(`${API_BASE_URL}/ai/solution`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
     return response.json();
   },
 };

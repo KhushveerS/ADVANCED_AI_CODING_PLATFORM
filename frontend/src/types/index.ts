@@ -19,6 +19,25 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export interface SheetMeta {
+  key: string;
+  title: string;
+  author: string;
+  description: string;
+  topics: string[];
+  total: number;
+  referenceUrl?: string;
+}
+
+export interface SheetProblemItem {
+  id: string;
+  title: string;
+  url: string;
+  topic: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  source: 'leetcode' | 'codeforces' | 'gfg' | 'other';
+}
+
 export interface Note {
   id: string;
   problemId: string;

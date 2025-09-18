@@ -20,7 +20,7 @@ export interface LeetCodeResponse {
 class LeetCodeService {
   private baseURL = 'https://leetcode.com/graphql';
   
-  private getProblemsQuery = (topic: string, difficulty: string, limit: number = 50) => {
+  private getProblemsQuery = (topic: string, difficulty: string, limit: number = 1000) => {
     return {
       query: `
         query problemsetQuestionList($categorySlug: String, $limit: Int, $skip: Int, $filters: QuestionListFilterInput) {
@@ -61,7 +61,7 @@ class LeetCodeService {
     };
   };
 
-  async getProblems(topic: string, difficulty: string, limit: number = 50): Promise<LeetCodeProblem[]> {
+  async getProblems(topic: string, difficulty: string, limit: number = 400): Promise<LeetCodeProblem[]> {
     try {
       const response = await axios.post<LeetCodeResponse>(this.baseURL, this.getProblemsQuery(topic, difficulty, limit), {
         headers: {

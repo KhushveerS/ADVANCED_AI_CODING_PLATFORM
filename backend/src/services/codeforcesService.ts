@@ -54,9 +54,9 @@ class CodeforcesService {
         );
       }
 
-      // Shuffle and limit to 50 problems for better performance
+      // Shuffle and limit to 1000 problems for better variety
       const shuffled = problems.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, 50);
+      return shuffled.slice(0, 1000);
     } catch (error) {
       console.error('Error fetching Codeforces problems:', error);
       throw new Error('Failed to fetch Codeforces problems');

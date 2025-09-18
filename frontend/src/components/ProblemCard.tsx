@@ -3,6 +3,7 @@
 import { Problem } from '@/types';
 import { storage } from '@/lib/storage';
 import { useState } from 'react';
+import { api } from '@/lib/api';
 
 interface ProblemCardProps {
   problem: Problem;
@@ -13,6 +14,13 @@ interface ProblemCardProps {
 export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(storage.isBookmarked(problem.id));
   const [isSolved, setIsSolved] = useState(storage.isSolved(problem.id));
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiTitle, setAiTitle] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiText, setAiText] = useState('');
+  const [aiTab, setAiTab] = useState<'explain' | 'hints' | 'solution'>('explain');
+  const [solutionLang, setSolutionLang] = useState<'c' | 'cpp' | 'java'>('cpp');
 
   const handleBookmark = () => {
     if (isBookmarked) {
@@ -57,6 +65,60 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+    }
+  };
+
+  const callExplain = async () => {
+    setAiOpen(true);
+    setAiTitle('AI Explanation');
+    setAiTab('explain');
+    setAiLoading(true);
+    setAiError(null);
+    setAiText('');
+    try {
+      const res = await api.aiExplain({ title: problem.title, url: problem.url });
+      if (res.success) setAiText(res.data as unknown as string);
+      else setAiError(res.message || 'Failed to get explanation');
+    } catch (e) {
+      setAiError('Failed to get explanation');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const callHints = async () => {
+    setAiOpen(true);
+    setAiTitle('AI Hints');
+    setAiTab('hints');
+    setAiLoading(true);
+    setAiError(null);
+    setAiText('');
+    try {
+      const res = await api.aiHints({ title: problem.title, url: problem.url });
+      if (res.success) setAiText(res.data as unknown as string);
+      else setAiError(res.message || 'Failed to get hints');
+    } catch (e) {
+      setAiError('Failed to get hints');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const callSolution = async () => {
+    setAiOpen(true);
+    setAiTitle('AI Solution');
+    setAiTab('solution');
+    setAiLoading(true);
+    setAiError(null);
+    setAiText('');
+    try {
+      const res = await api.aiSolution({ title: problem.title, url: problem.url, language: solutionLang });
+      if (res.success) setAiText(res.data as unknown as string);
+      else setAiError(res.message || 'Failed to get solution');
+    } catch (e) {
+      setAiError('Failed to get solution');
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -147,6 +209,11 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
+          <div className="flex gap-2">
+            <button onClick={callExplain} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-md">Explain</button>
+            <button onClick={callHints} className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium rounded-md">Hints</button>
+            <button onClick={callSolution} className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md">Solution</button>
+          </div>
           {problem.acceptanceRate && (
             <span className="text-sm text-gray-500 dark:text-gray-400">
               {problem.acceptanceRate.toFixed(1)}% acceptance
@@ -154,6 +221,35 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
           )}
         </div>
       </div>
+      {aiOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setAiOpen(false)}>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <h4 className="font-semibold text-gray-900 dark:text-white">{aiTitle}</h4>
+              <button onClick={() => setAiOpen(false)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">✕</button>
+            </div>
+            <div className="px-4 pt-3 pb-4 max-h-[70vh] overflow-auto">
+              <div className="flex items-center gap-2 mb-3">
+                <button onClick={callExplain} className={`text-xs px-2 py-1 rounded ${aiTab==='explain'?'bg-indigo-600 text-white':'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>Explain</button>
+                <button onClick={callHints} className={`text-xs px-2 py-1 rounded ${aiTab==='hints'?'bg-purple-600 text-white':'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>Hints</button>
+                <div className="ml-auto flex items-center gap-2">
+                  <select value={solutionLang} onChange={(e)=>setSolutionLang(e.target.value as any)} className="text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-100 rounded px-2 py-1">
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                  </select>
+                  <button onClick={callSolution} className={`text-xs px-2 py-1 rounded ${aiTab==='solution'?'bg-emerald-600 text-white':'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>Solution</button>
+                </div>
+              </div>
+              {aiLoading && <div className="text-sm text-gray-600 dark:text-gray-300">Generating…</div>}
+              {aiError && <div className="text-sm text-red-600">{aiError}</div>}
+              {!aiLoading && !aiError && (
+                <pre className="whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">{aiText}</pre>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

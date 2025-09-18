@@ -1,6 +1,20 @@
 import Link from 'next/link';
 
-export default function Home() {
+async function fetchSheets() {
+  const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  try {
+    const res = await fetch(`${base}/sheets`, { cache: 'no-store' });
+    const json = await res.json();
+    if (json?.success && Array.isArray(json.data)) return json.data as Array<{ key: string; title: string; author: string; total: number }>; 
+  } catch {}
+  return [
+    { key: 'striver', title: "Striver's A2Z DSA Sheet", author: 'Striver', total: 0 },
+    { key: 'babbar', title: "Love Babbar's 450 DSA Sheet", author: 'Love Babbar', total: 0 },
+  ];
+}
+
+export default async function Home() {
+  const sheets = await fetchSheets();
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -134,6 +148,29 @@ export default function Home() {
               Comfortable coding experience with dark and light theme support.
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Sheets Section */}
+      <div className="mt-20 max-w-4xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">DSA Sheets</h2>
+          <Link href="/sheets" className="text-blue-600 dark:text-blue-400 hover:underline">View all</Link>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          {sheets.slice(0, 2).map((s) => (
+            <Link key={s.key} href="/sheets" className="group">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-all p-6 border border-gray-200 dark:border-gray-700 group-hover:border-indigo-300 dark:group-hover:border-indigo-600">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">{s.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{s.author} • {s.total || '—'} problems</p>
+                  </div>
+                  <span className="text-indigo-600 dark:text-indigo-400 group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
