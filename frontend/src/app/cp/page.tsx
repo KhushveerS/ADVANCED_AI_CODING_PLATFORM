@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Problem } from '@/types';
 import { api } from '@/lib/api';
 import ProblemCard from '@/components/ProblemCard';
+import { storage } from '@/lib/storage';
 
 export default function CPPage() {
   const [problems, setProblems] = useState<Problem[]>([]);
@@ -14,10 +15,12 @@ export default function CPPage() {
   const [selectedRatingMax, setSelectedRatingMax] = useState(1500);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState({ solved: 0, total: 0 });
 
   useEffect(() => {
     loadTopics();
     loadRatingRanges();
+    loadProgress();
   }, []);
 
   useEffect(() => {
@@ -57,6 +60,12 @@ export default function CPPage() {
       );
       if (response.success) {
         setProblems(response.data);
+        // Update progress
+        const progressData = storage.getProgress();
+        const solvedCount = response.data.filter(problem => 
+          progressData.solved.includes(problem.id)
+        ).length;
+        setProgress({ solved: solvedCount, total: response.data.length });
       } else {
         setError(response.message || 'Failed to load problems');
       }
@@ -68,12 +77,20 @@ export default function CPPage() {
     }
   };
 
+  const loadProgress = () => {
+    // This will be updated when problems are loaded
+  };
+
   const handleBookmark = (problemId: string) => {
     console.log('Bookmarked problem:', problemId);
+    // Reload problems to update UI
+    loadProblems();
   };
 
   const handleSolve = (problemId: string) => {
     console.log('Solved problem:', problemId);
+    // Reload problems to update UI
+    loadProblems();
   };
 
   const handleRatingRangeChange = (range: { min: number; max: number }) => {
@@ -84,25 +101,43 @@ export default function CPPage() {
   return (
     <div className="min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Competitive Programming
         </h1>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-gray-600">
           Practice problems from Codeforces with different rating ranges and topics
         </p>
       </div>
 
+      {/* Progress Bar */}
+      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-medium text-gray-700">
+            Progress: {progress.solved} / {progress.total} problems solved
+          </span>
+          <span className="text-sm font-medium text-gray-700">
+            {progress.total > 0 ? Math.round((progress.solved / progress.total) * 100) : 0}%
+          </span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div 
+            className="bg-purple-600 h-2.5 rounded-full" 
+            style={{ width: `${progress.total > 0 ? (progress.solved / progress.total) * 100 : 0}%` }}
+          ></div>
+        </div>
+      </div>
+
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="grid md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Topic (Optional)
             </label>
             <select
               value={selectedTopic}
               onChange={(e) => setSelectedTopic(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-900"
             >
               <option value="">All Topics</option>
               {topics.map((topic) => (
@@ -113,7 +148,7 @@ export default function CPPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Rating Range
             </label>
             <div className="flex space-x-2">
@@ -121,7 +156,7 @@ export default function CPPage() {
                 type="number"
                 value={selectedRatingMin}
                 onChange={(e) => setSelectedRatingMin(parseInt(e.target.value) || 0)}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-900"
                 placeholder="Min"
               />
               <span className="flex items-center text-gray-500">-</span>
@@ -129,13 +164,13 @@ export default function CPPage() {
                 type="number"
                 value={selectedRatingMax}
                 onChange={(e) => setSelectedRatingMax(parseInt(e.target.value) || 0)}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-900"
                 placeholder="Max"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Quick Select
             </label>
             <select
@@ -143,7 +178,7 @@ export default function CPPage() {
                 const range = ratingRanges.find(r => r.label === e.target.value);
                 if (range) handleRatingRangeChange(range);
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-900"
             >
               <option value="">Select Range</option>
               {ratingRanges.map((range) => (
@@ -164,7 +199,7 @@ export default function CPPage() {
       )}
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 mb-6">
+        <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
           <div className="flex">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -172,10 +207,10 @@ export default function CPPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+              <h3 className="text-sm font-medium text-red-800">
                 Error loading problems
               </h3>
-              <div className="mt-2 text-sm text-red-700 dark:text-red-300">
+              <div className="mt-2 text-sm text-red-700">
                 {error}
               </div>
             </div>
@@ -185,11 +220,11 @@ export default function CPPage() {
 
       {!loading && !error && problems.length === 0 && (
         <div className="text-center py-12">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="mx-auto h-12 w-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No problems found</h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No problems found</h3>
+          <p className="mt-1 text-sm text-gray-500">
             Try adjusting your filters or check back later.
           </p>
         </div>
@@ -198,10 +233,10 @@ export default function CPPage() {
       {!loading && !error && problems.length > 0 && (
         <div className="grid gap-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-gray-900">
               {problems.length} problems found
             </h2>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-gray-500">
               Rating: {selectedRatingMin}-{selectedRatingMax}
               {selectedTopic && ` | Topic: ${selectedTopic}`}
             </div>

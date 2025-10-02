@@ -12,17 +12,20 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/dsa', label: 'DSA' },
     { href: '/cp', label: 'CP' },
+    { href: '/contest', label: 'Contest' },
+    { href: '/system-design', label: 'System Design' },
+    { href: '/operating-system', label: 'OS' },
     { href: '/notes', label: 'Notes' },
   ];
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
+    <nav className="bg-white shadow-lg border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                DSA<span className="text-blue-600 dark:text-blue-400">CP</span>
+              <span className="text-2xl font-bold text-gray-900">
+                DSA<span className="text-blue-600">CP</span>
               </span>
             </Link>
           </div>
@@ -34,8 +37,8 @@ export default function Navbar() {
                 href={item.href}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname === item.href
-                    ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                 }`}
               >
                 {item.label}
@@ -46,7 +49,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors"
               aria-label="Toggle theme"
             >
               {theme === 'light' ? (

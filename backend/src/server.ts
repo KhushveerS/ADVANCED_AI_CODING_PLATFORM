@@ -12,7 +12,7 @@ import aiRouter from './routes/ai';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
@@ -241,6 +241,25 @@ app.get('/api/cp/rating-ranges', (req: express.Request, res: express.Response) =
     success: true,
     data: ranges
   });
+});
+
+// Codeforces Contests
+app.get('/api/contests/codeforces', async (req: express.Request, res: express.Response) => {
+  try {
+    const contests = await codeforcesService.getContests();
+    const formattedContests = contests.map(contest => codeforcesService.formatContest(contest));
+    
+    res.json({
+      success: true,
+      data: formattedContests
+    });
+  } catch (error) {
+    console.error('Error fetching Codeforces contests:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch Codeforces contests'
+    });
+  }
 });
 
 // Sheets: list metadata

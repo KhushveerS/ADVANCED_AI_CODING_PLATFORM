@@ -1,6 +1,6 @@
 import { Problem, ApiResponse, SheetMeta, SheetProblemItem } from '@/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 
 export const api = {
   // DSA API calls
@@ -78,4 +78,12 @@ export const api = {
     });
     return response.json();
   },
+
+  // Contests
+  async getCodeforcesContests(): Promise<ApiResponse<any[]>> {
+    const response = await fetch(`${API_BASE_URL}/contests/codeforces`);
+    return response.json();
+  },
 };
+
+export default api;

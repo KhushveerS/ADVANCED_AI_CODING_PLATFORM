@@ -6,11 +6,16 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 
 - **DSA Problems**: Practice LeetCode problems organized by topic and difficulty
 - **CP Problems**: Solve Codeforces problems with different rating ranges
+- **Contest Tracking**: Stay updated with upcoming programming contests
+- **System Design**: Learn system design concepts and prepare for interviews
+- **Operating System**: Study OS concepts with dedicated learning paths
 - **Progress Tracking**: Track solved and bookmarked problems with local storage
 - **Personal Notes**: Save notes for each problem
 - **Dark/Light Theme**: Comfortable coding experience
 - **Real-time API**: Fresh problems fetched from LeetCode and Codeforces
 - **Responsive Design**: Works on all devices
+- **Circular Progress Visualization**: Visualize your DSA and CP progress with circular indicators
+- **Separate DSA/CP Tracking**: Track DSA and CP problems separately with detailed statistics
 
 ## Tech Stack
 
@@ -35,6 +40,9 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 │   │   ├── app/             # App router pages
 │   │   │   ├── dsa/         # DSA problems page
 │   │   │   ├── cp/          # CP problems page
+│   │   │   ├── contest/     # Contest tracking page
+│   │   │   ├── system-design/ # System design learning page
+│   │   │   ├── operating-system/ # OS learning page
 │   │   │   └── notes/       # Notes page
 │   │   ├── components/      # React components
 │   │   ├── lib/            # Utilities and API calls
@@ -105,6 +113,9 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 - `GET /api/cp/topics` - Get available topics
 - `GET /api/cp/rating-ranges` - Get rating ranges
 
+### Contest API
+- `GET /api/contests/codeforces` - Get upcoming Codeforces contests
+
 ### Health Check
 - `GET /api/health` - Server health status
 
@@ -116,18 +127,33 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 3. Choose difficulty (Easy, Medium, Hard)
 4. Browse and solve problems
 5. Bookmark interesting problems
-6. Track your progress
+6. Track your progress with circular indicators
 
 ### Competitive Programming
 1. Navigate to `/cp`
 2. Set rating range (e.g., 1200-1500)
 3. Optionally filter by topic
 4. Solve problems from Codeforces
-5. Track your progress
+5. Track your progress with circular indicators
+
+### Contest Tracking
+1. Navigate to `/contest`
+2. View upcoming and ongoing contests from Codeforces
+3. Get real-time contest information
+
+### System Design Learning
+1. Navigate to `/system-design`
+2. Explore system design topics and concepts
+3. Track your learning progress
+
+### Operating System Learning
+1. Navigate to `/operating-system`
+2. Study OS concepts with detailed resources
+3. Track your learning progress
 
 ### Notes & Progress
 1. Navigate to `/notes`
-2. View your progress statistics
+2. View your progress statistics with circular indicators for DSA and CP
 3. Add notes for specific problems
 4. Edit or delete existing notes
 
@@ -174,6 +200,9 @@ curl "http://localhost:5000/api/dsa/problems?topic=array&difficulty=medium"
 # Test CP problems
 curl "http://localhost:5000/api/cp/problems?ratingMin=1200&ratingMax=1500"
 
+# Test contests
+curl "http://localhost:5000/api/contests/codeforces"
+
 # Test health check
 curl "http://localhost:5000/api/health"
 ```
@@ -189,11 +218,18 @@ curl "http://localhost:5000/api/health"
 - Local storage for solved/bookmarked problems
 - Personal notes for each problem
 - Progress statistics dashboard
+- Circular progress visualization for DSA and CP separately
+- Detailed progress tracking in each section
 
 ### Theme Support
 - Dark and light theme toggle
 - Persistent theme preference
 - System theme detection
+
+### New Sections
+- **Contest Tracking**: Real-time contest information from Codeforces
+- **System Design**: Comprehensive system design learning resources
+- **Operating System**: Detailed OS concept learning with study materials
 
 ## Contributing
 
@@ -227,7 +263,9 @@ This project is licensed under the MIT License.
 
 - User authentication and profiles
 - Problem recommendations
-- Contest integration
+- Contest integration with more platforms
 - Social features (leaderboards, discussions)
 - Mobile app
 - Advanced analytics and insights
+- AI-powered problem suggestions
+- Interview preparation modules

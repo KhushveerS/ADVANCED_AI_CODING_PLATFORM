@@ -10,16 +10,29 @@ export interface CodeforcesProblem {
   tags: string[];
 }
 
-export interface CodeforcesResponse {
+export interface CodeforcesContest {
+  id: number;
+  name: string;
+  type: string;
+  phase: string;
+  frozen: boolean;
+  durationSeconds: number;
+  startTimeSeconds: number;
+  relativeTimeSeconds: number;
+  preparedBy?: string;
+  websiteUrl?: string;
+  description?: string;
+  difficulty?: number;
+  kind?: string;
+  icpcRegion?: string;
+  country?: string;
+  city?: string;
+  season?: string;
+}
+
+export interface CodeforcesResponse<T> {
   status: string;
-  result: {
-    problems: CodeforcesProblem[];
-    problemStatistics: Array<{
-      contestId: number;
-      index: string;
-      solvedCount: number;
-    }>;
-  };
+  result: T;
 }
 
 class CodeforcesService {
@@ -27,7 +40,7 @@ class CodeforcesService {
 
   async getProblems(ratingMin: number, ratingMax: number, topic?: string): Promise<CodeforcesProblem[]> {
     try {
-      const response = await axios.get<CodeforcesResponse>(`${this.baseURL}/problemset.problems`);
+      const response = await axios.get<CodeforcesResponse<{ problems: CodeforcesProblem[], problemStatistics: any[] }>>(`${this.baseURL}/problemset.problems`);
       
       if (response.data.status !== 'OK') {
         throw new Error('Codeforces API returned error');
@@ -63,6 +76,30 @@ class CodeforcesService {
     }
   }
 
+  async getContests(): Promise<CodeforcesContest[]> {
+    try {
+      const response = await axios.get<CodeforcesResponse<CodeforcesContest[]>>(`${this.baseURL}/contest.list`);
+      
+      if (response.data.status !== 'OK') {
+        throw new Error('Codeforces API returned error');
+      }
+
+      // Filter to only include upcoming and current contests
+      const now = Math.floor(Date.now() / 1000);
+      const contests = response.data.result.filter(contest => 
+        contest.phase === 'BEFORE' || contest.phase === 'CODING'
+      );
+
+      // Sort by start time (soonest first)
+      contests.sort((a, b) => a.startTimeSeconds - b.startTimeSeconds);
+
+      return contests;
+    } catch (error) {
+      console.error('Error fetching Codeforces contests:', error);
+      throw new Error('Failed to fetch Codeforces contests');
+    }
+  }
+
   formatProblem(problem: CodeforcesProblem) {
     return {
       id: `${problem.contestId}${problem.index}`,
@@ -73,6 +110,36 @@ class CodeforcesService {
       url: `https://codeforces.com/problemset/problem/${problem.contestId}/${problem.index}`,
       source: 'codeforces' as const,
       rating: problem.rating,
+    };
+  }
+
+  formatContest(contest: CodeforcesContest) {
+    const now = Math.floor(Date.now() / 1000);
+    let status: 'upcoming' | 'ongoing' | 'ended' = 'ended';
+    
+    if (contest.phase === 'BEFORE') {
+      status = 'upcoming';
+    } else if (contest.phase === 'CODING') {
+      status = 'ongoing';
+    }
+
+    // Convert duration from seconds to human readable format
+    const hours = Math.floor(contest.durationSeconds / 3600);
+    const minutes = Math.floor((contest.durationSeconds % 3600) / 60);
+    const duration = `${hours}h ${minutes}m`;
+
+    // Convert start time to readable format
+    const startDate = new Date(contest.startTimeSeconds * 1000);
+    const date = startDate.toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
+
+    return {
+      id: contest.id.toString(),
+      name: contest.name,
+      platform: 'Codeforces',
+      date,
+      duration,
+      status,
+      url: `https://codeforces.com/contests/${contest.id}`
     };
   }
 

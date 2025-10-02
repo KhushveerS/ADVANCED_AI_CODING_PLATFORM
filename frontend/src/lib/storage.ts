@@ -83,4 +83,28 @@ export const storage = {
     const progress = this.getProgress();
     return progress.bookmarked.includes(problemId);
   },
+
+  // New methods to track DSA and CP problems separately
+  getDSASolvedCount(): number {
+    const progress = this.getProgress();
+    // In a real implementation, you would filter by source or ID pattern
+    // For now, we'll use a simple approach
+    return progress.solved.filter(id => 
+      id.startsWith('lc-') || id.startsWith('leetcode-') || !id.includes('cf-')
+    ).length;
+  },
+
+  getCPSolvedCount(): number {
+    const progress = this.getProgress();
+    // In a real implementation, you would filter by source or ID pattern
+    // For now, we'll use a simple approach
+    return progress.solved.filter(id => 
+      id.startsWith('cf-') || id.startsWith('codeforces-') || id.includes('cf-')
+    ).length;
+  },
+
+  getTotalSolvedCount(): number {
+    const progress = this.getProgress();
+    return progress.solved.length;
+  }
 };

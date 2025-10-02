@@ -2,7 +2,7 @@
 
 import { Problem } from '@/types';
 import { storage } from '@/lib/storage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 
 interface ProblemCardProps {
@@ -12,8 +12,8 @@ interface ProblemCardProps {
 }
 
 export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCardProps) {
-  const [isBookmarked, setIsBookmarked] = useState(storage.isBookmarked(problem.id));
-  const [isSolved, setIsSolved] = useState(storage.isSolved(problem.id));
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isSolved, setIsSolved] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [aiTitle, setAiTitle] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -21,6 +21,12 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
   const [aiText, setAiText] = useState('');
   const [aiTab, setAiTab] = useState<'explain' | 'hints' | 'solution'>('explain');
   const [solutionLang, setSolutionLang] = useState<'c' | 'cpp' | 'java'>('cpp');
+
+  // Initialize bookmark and solved states
+  useEffect(() => {
+    setIsBookmarked(storage.isBookmarked(problem.id));
+    setIsSolved(storage.isSolved(problem.id));
+  }, [problem.id]);
 
   const handleBookmark = () => {
     if (isBookmarked) {
@@ -47,24 +53,24 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
       case 'easy':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+        return 'bg-green-100 text-green-800';
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+        return 'bg-yellow-100 text-yellow-800';
       case 'hard':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+        return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getSourceColor = (source: string) => {
     switch (source) {
       case 'leetcode':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+        return 'bg-orange-100 text-orange-800';
       case 'codeforces':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+        return 'bg-blue-100 text-blue-800';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -123,11 +129,11 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700">
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200">
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {problem.title}
             </h3>
             <div className="flex flex-wrap gap-2 mb-3">
@@ -138,7 +144,7 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
                 {problem.source}
               </span>
               {problem.rating && (
-                <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                   {problem.rating}
                 </span>
               )}
@@ -175,7 +181,7 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
         </div>
 
         <div className="mb-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <div className="text-sm text-gray-600 mb-2">
             <span className="font-medium">Topic:</span> {problem.topic}
           </div>
           {problem.tags.length > 0 && (
@@ -183,13 +189,13 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
               {problem.tags.slice(0, 3).map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded"
+                  className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
                 >
                   {tag}
                 </span>
               ))}
               {problem.tags.length > 3 && (
-                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
                   +{problem.tags.length - 3} more
                 </span>
               )}
@@ -215,7 +221,7 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
             <button onClick={callSolution} className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md">Solution</button>
           </div>
           {problem.acceptanceRate && (
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-sm text-gray-500">
               {problem.acceptanceRate.toFixed(1)}% acceptance
             </span>
           )}
@@ -223,28 +229,28 @@ export default function ProblemCard({ problem, onBookmark, onSolve }: ProblemCar
       </div>
       {aiOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setAiOpen(false)}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
-            <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-              <h4 className="font-semibold text-gray-900 dark:text-white">{aiTitle}</h4>
-              <button onClick={() => setAiOpen(false)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">✕</button>
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+              <h4 className="font-semibold text-gray-900">{aiTitle}</h4>
+              <button onClick={() => setAiOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
             </div>
             <div className="px-4 pt-3 pb-4 max-h-[70vh] overflow-auto">
               <div className="flex items-center gap-2 mb-3">
-                <button onClick={callExplain} className={`text-xs px-2 py-1 rounded ${aiTab==='explain'?'bg-indigo-600 text-white':'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>Explain</button>
-                <button onClick={callHints} className={`text-xs px-2 py-1 rounded ${aiTab==='hints'?'bg-purple-600 text-white':'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>Hints</button>
+                <button onClick={callExplain} className={`text-xs px-2 py-1 rounded ${aiTab==='explain'?'bg-indigo-600 text-white':'bg-gray-200 text-gray-700'}`}>Explain</button>
+                <button onClick={callHints} className={`text-xs px-2 py-1 rounded ${aiTab==='hints'?'bg-purple-600 text-white':'bg-gray-200 text-gray-700'}`}>Hints</button>
                 <div className="ml-auto flex items-center gap-2">
-                  <select value={solutionLang} onChange={(e)=>setSolutionLang(e.target.value as any)} className="text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-100 rounded px-2 py-1">
+                  <select value={solutionLang} onChange={(e)=>setSolutionLang(e.target.value as any)} className="text-xs bg-gray-100 text-gray-900 rounded px-2 py-1">
                     <option value="c">C</option>
                     <option value="cpp">C++</option>
                     <option value="java">Java</option>
                   </select>
-                  <button onClick={callSolution} className={`text-xs px-2 py-1 rounded ${aiTab==='solution'?'bg-emerald-600 text-white':'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>Solution</button>
+                  <button onClick={callSolution} className={`text-xs px-2 py-1 rounded ${aiTab==='solution'?'bg-emerald-600 text-white':'bg-gray-200 text-gray-700'}`}>Solution</button>
                 </div>
               </div>
-              {aiLoading && <div className="text-sm text-gray-600 dark:text-gray-300">Generating…</div>}
+              {aiLoading && <div className="text-sm text-gray-600">Generating…</div>}
               {aiError && <div className="text-sm text-red-600">{aiError}</div>}
               {!aiLoading && !aiError && (
-                <pre className="whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">{aiText}</pre>
+                <pre className="whitespace-pre-wrap text-sm text-gray-900">{aiText}</pre>
               )}
             </div>
           </div>

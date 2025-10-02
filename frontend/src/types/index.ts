@@ -51,3 +51,13 @@ export interface Progress {
   bookmarked: string[];
   notes: Note[];
 }
+
+export interface Contest {
+  id: string;
+  name: string;
+  platform: string;
+  date: string;
+  duration: string;
+  status: 'upcoming' | 'ongoing' | 'ended';
+  url?: string;
+}
