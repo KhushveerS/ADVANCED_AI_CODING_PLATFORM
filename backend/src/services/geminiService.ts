@@ -5,7 +5,7 @@ export class GeminiService {
 
   private getClient(): GoogleGenerativeAI {
     if (!this.client) {
-      const key = process.env.GEMINI_API_KEY || '';
+      const key = 'AIzaSyDCsQ1NpmZU581-g--sJGSCG2PI2x-YnHI';
       if (!key) {
         throw new Error('Gemini not configured');
       }
@@ -19,7 +19,7 @@ export class GeminiService {
   }
 
   async generateExplanation(input: { title: string; url?: string; details?: string }) {
-    const model = this.getClient().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = this.getClient().getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
     const prompt = `You are an experienced DSA mentor. Explain the problem clearly and concisely.
 Problem Title: ${input.title}
 Reference URL: ${input.url || 'N/A'}
@@ -35,7 +35,7 @@ Provide:
   }
 
   async generateHints(input: { title: string; url?: string; currentThought?: string }) {
-    const model = this.getClient().getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = this.getClient().getGenerativeModel({ model: 'gemini-2.5-pro' });
     const prompt = `Provide 3 progressively revealing hints for this problem without giving the final answer.
 Problem: ${input.title}
 Reference: ${input.url || 'N/A'}
@@ -46,8 +46,8 @@ Student's current thought: ${input.currentThought || 'N/A'}
   }
 
   async generateSolution(input: { title: string; url?: string; language: 'c' | 'cpp' | 'java' }) {
-    const model = this.getClient().getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const languageName = input.language === 'cpp' ? 'C++' : input.language === 'c' ? 'C' : 'Java';
+    const model = this.getClient().getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+    const languageName = input.language === 'cpp' ? 'C++' : input.language === 'java' ? 'Java' : 'C';
     const prompt = `Provide a clean, idiomatic ${languageName} solution for the following problem.
 Problem: ${input.title}
 Reference: ${input.url || 'N/A'}
@@ -59,5 +59,4 @@ Output strictly in a single code block with only the code, no extra commentary.`
 }
 
 export default new GeminiService();
-
 

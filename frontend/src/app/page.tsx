@@ -72,11 +72,11 @@ export default function Home() {
       color: "red"
     },
     {
-      title: "Progress Tracking",
-      description: "Track your solved problems, bookmarks, and personal notes for each problem across all domains.",
+      title: "Knowledge Quiz",
+      description: "Test your understanding with interactive quizzes and earn certificates upon completion.",
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
       color: "indigo"
@@ -90,20 +90,16 @@ export default function Home() {
     { value: "1000+", label: "Users" }
   ];
 
-  // Calculate progress percentages for circular progress
-  const totalSolved = progress.solved.length;
-  const dsaProgress = Math.min(100, Math.round((dsaProblems.length / Math.max(1, totalSolved)) * 100));
-  const cpProgress = Math.min(100, Math.round((cpProblems.length / Math.max(1, totalSolved)) * 100));
-
+ 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="text-center py-16 md:py-24">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Master <span className="text-blue-600">DSA</span>,{' '}
-          <span className="text-purple-600">CP</span> & More
+      <div className="text-center py-16 md:py-24 bg-gradient-to-r from-blue-500 to-green-500">
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+          Master <span className="text-white">DSA</span>,{' '}
+          <span className="text-white">CP</span> & More
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
           The ultimate platform for computer science preparation. Practice coding problems, 
           track contests, learn system design, and master operating systems - all in one place.
         </p>
@@ -202,21 +198,21 @@ export default function Home() {
                   </h2>
                   <p className="text-gray-600 mb-6">
                     Solve problems from Codeforces with different rating ranges 
-                    and topics to improve your competitive programming skills.
+                    and topics to improve your CP skills.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2 mb-6">
                     <span className="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">
-                      800-1200
+                      1200-1500
                     </span>
                     <span className="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">
-                      1200-1600
+                      DP
                     </span>
                     <span className="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">
-                      1600+
+                      Graphs
                     </span>
                   </div>
                   <div className="inline-flex items-center text-purple-600 font-medium group-hover:text-purple-700">
-                    Start Competing
+                    Start Solving
                     <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -336,35 +332,35 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* Notes Card */}
-            <Link href="/notes" className="group">
+            {/* Knowledge Quiz Card */}
+            <Link href="/quiz" className="group">
               <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 border border-gray-200 group-hover:border-indigo-300 h-full">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    Progress Tracking
+                    Knowledge Quiz
                   </h2>
                   <p className="text-gray-600 mb-6">
-                    Track your solved problems, bookmarks, and personal notes for 
-                    each problem across all domains.
+                    Test your understanding with interactive quizzes and earn 
+                    certificates upon successful completion.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2 mb-6">
                     <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">
-                      Notes
+                      DSA
                     </span>
                     <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">
-                      Progress
+                      CS Fundamentals
                     </span>
                     <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full">
-                      Stats
+                      Certificates
                     </span>
                   </div>
                   <div className="inline-flex items-center text-indigo-600 font-medium group-hover:text-indigo-700">
-                    Track Progress
+                    Take Quiz
                     <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>

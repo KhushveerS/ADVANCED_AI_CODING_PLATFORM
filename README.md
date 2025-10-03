@@ -16,6 +16,10 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 - **Responsive Design**: Works on all devices
 - **Circular Progress Visualization**: Visualize your DSA and CP progress with circular indicators
 - **Separate DSA/CP Tracking**: Track DSA and CP problems separately with detailed statistics
+- **AI Coding Assistant**: Get intelligent help with coding problems, explanations, and code reviews
+- **Knowledge Quiz**: Test your understanding with interactive quizzes
+- **Certificate Generation**: Earn certificates upon successful quiz completion
+- **Certificate Verification**: Verify certificate authenticity using QR codes
 
 ## Tech Stack
 
@@ -24,6 +28,9 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 - TypeScript
 - Tailwind CSS
 - Local Storage for progress tracking
+- Lucide React for icons
+- Google Generative AI for AI assistant
+- QRCode React for certificate verification
 
 ### Backend
 - Node.js
@@ -43,6 +50,9 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 │   │   │   ├── contest/     # Contest tracking page
 │   │   │   ├── system-design/ # System design learning page
 │   │   │   ├── operating-system/ # OS learning page
+│   │   │   ├── quiz/        # Knowledge quiz page
+│   │   │   ├── certificate/ # Certificate generation page
+│   │   │   ├── verify/[id]/ # Certificate verification page
 │   │   │   └── notes/       # Notes page
 │   │   ├── components/      # React components
 │   │   ├── lib/            # Utilities and API calls
@@ -64,6 +74,7 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 - Node.js 18+ 
 - MongoDB (local or cloud)
 - npm or yarn
+- Google Gemini API Key (for AI assistant)
 
 ### Installation
 
@@ -93,6 +104,9 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
    # Create .env.local file
    cp env.local.example .env.local
    
+   # Add your Google Gemini API key to .env.local
+   echo "NEXT_PUBLIC_GEMINI_API_KEY=your_api_key_here" >> .env.local
+   
    # Start frontend development server
    npm run dev
    ```
@@ -115,6 +129,9 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 
 ### Contest API
 - `GET /api/contests/codeforces` - Get upcoming Codeforces contests
+
+### Certificate API
+- `GET /api/certificate/verify/:id` - Verify certificate authenticity
 
 ### Health Check
 - `GET /api/health` - Server health status
@@ -151,6 +168,30 @@ A comprehensive platform for practicing Data Structures & Algorithms and Competi
 2. Study OS concepts with detailed resources
 3. Track your learning progress
 
+### Knowledge Quiz
+1. Navigate to `/quiz`
+2. Take the DSA Fundamentals Quiz
+3. Answer 5 questions on core concepts
+4. Complete with a score of 70% or higher to earn a certificate
+
+### Certificate Generation
+1. Successfully complete a quiz with 70% or higher
+2. Click "Generate Certificate" on the results page
+3. View your personalized certificate
+4. Print or save the certificate for your records
+
+### Certificate Verification
+1. Scan the QR code on any certificate
+2. Or visit `/verify/[certificate-id]` directly
+3. View certificate details and verification status
+4. Confirm authenticity with the verification timestamp
+
+### AI Coding Assistant
+1. Click the floating AI assistant button in the bottom right corner
+2. Use the chat tab to ask coding questions
+3. Use the code analysis tab to get feedback on your code
+4. Access learning resources through the resources tab
+
 ### Notes & Progress
 1. Navigate to `/notes`
 2. View your progress statistics with circular indicators for DSA and CP
@@ -168,6 +209,7 @@ NODE_ENV=development
 ### Frontend (.env.local)
 ```
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
+NEXT_PUBLIC_GEMINI_API_KEY=your_google_gemini_api_key_here
 ```
 
 ## Development
@@ -230,6 +272,10 @@ curl "http://localhost:5000/api/health"
 - **Contest Tracking**: Real-time contest information from Codeforces
 - **System Design**: Comprehensive system design learning resources
 - **Operating System**: Detailed OS concept learning with study materials
+- **Knowledge Quiz**: Interactive quizzes to test understanding
+- **Certificate Generation**: Official-looking certificates for quiz completion
+- **Certificate Verification**: QR code-based verification system
+- **AI Coding Assistant**: Intelligent coding help powered by Google Gemini
 
 ## Contributing
 
@@ -255,7 +301,23 @@ This project is licensed under the MIT License.
    - Verify backend is running on port 5000
    - Check NEXT_PUBLIC_API_URL in frontend .env.local
 
-3. **Build Errors**
+3. **AI Assistant Not Working**
+   - Verify you have added your Google Gemini API key to .env.local
+   - Check that the API key is valid and has proper permissions
+   - Make sure you're using a supported model (gemini-pro)
+   - Check browser console for detailed error messages
+
+4. **Quiz/Certificate Issues**
+   - Ensure JavaScript is enabled in your browser
+   - Check browser console for any errors
+   - Try refreshing the page if the quiz doesn't load properly
+
+5. **Certificate Verification Problems**
+   - Ensure the QR code is scanned properly
+   - Check that the certificate ID is valid
+   - Try manual verification by visiting `/verify/[certificate-id]`
+
+6. **Build Errors**
    - Run `npm install` in both frontend and backend
    - Check Node.js version compatibility
 
@@ -269,3 +331,5 @@ This project is licensed under the MIT License.
 - Advanced analytics and insights
 - AI-powered problem suggestions
 - Interview preparation modules
+- More quiz topics and certificate types
+- Enhanced certificate verification with blockchain technology

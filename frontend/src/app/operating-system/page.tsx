@@ -229,10 +229,10 @@ export default function OperatingSystemPage() {
   return (
     <div className="min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600">
           Operating System
         </h1>
-        <p className="text-gray-600">
+        <p className="text-white bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600">
           Master operating system concepts and prepare for technical interviews
         </p>
       </div>

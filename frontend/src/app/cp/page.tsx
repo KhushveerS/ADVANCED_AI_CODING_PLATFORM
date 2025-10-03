@@ -101,10 +101,10 @@ export default function CPPage() {
   return (
     <div className="min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-teal-400 to-emerald-500 ">
           Competitive Programming
         </h1>
-        <p className="text-gray-600">
+        <p className="text-white bg-gradient-to-r from-teal-400 to-emerald-500" >
           Practice problems from Codeforces with different rating ranges and topics
         </p>
       </div>

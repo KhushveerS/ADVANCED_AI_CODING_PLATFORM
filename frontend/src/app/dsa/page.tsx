@@ -93,10 +93,10 @@ export default function DSAPage() {
   return (
     <div className="min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 ">
           Data Structures & Algorithms
         </h1>
-        <p className="text-gray-600">
+        <p className="text-white bg-gradient-to-r from-purple-500 to-pink-500 ">
           Practice problems from LeetCode organized by topic and difficulty
         </p>
       </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { Contest } from '@/types';
+import { ExternalLink, Trophy } from 'lucide-react';
 
 export default function ContestPage() {
   const [contests, setContests] = useState<Contest[]>([]);
@@ -117,18 +118,53 @@ export default function ContestPage() {
         default: return status;
       }
     };
-
+    const platforms = [
+    { name: 'Codeforces', url: 'https://codeforces.com', color: 'from-blue-500 to-blue-600' },
+    { name: 'LeetCode', url: 'https://leetcode.com/contest', color: 'from-yellow-500 to-orange-600' },
+    { name: 'CodeChef', url: 'https://www.codechef.com/contests', color: 'from-green-500 to-green-600' },
+    { name: 'AtCoder', url: 'https://atcoder.jp/contests', color: 'from-gray-600 to-gray-700' },
+  ];
     return (
       <div className="min-h-screen">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-white  bg-gradient-to-r from-pink-500 to-purple-500">
             Contests
           </h1>
-          <p className="text-gray-600">
+          <p className="text-white bg-gradient-to-r from-pink-500 to-purple-500">
             Stay updated with upcoming programming contests and competitions
           </p>
         </div>
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contest Platforms</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {platforms.map((platform, index) => (
+              <a
+                key={index}
+                href={platform.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all border border-gray-100 hover:border-transparent"
+              >
+                <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br ${platform.color} mb-4 group-hover:scale-110 transition-transform`}>
+                  <Trophy className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{platform.name}</h3>
+                <div className="flex items-center text-purple-600 font-medium text-sm">
+                  Visit Platform <ExternalLink className="w-4 h-4 ml-1" />
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+          {/* const platforms = [
+    { name: 'Codeforces', url: 'https://codeforces.com', color: 'from-blue-500 to-blue-600' },
+    { name: 'LeetCode', url: 'https://leetcode.com/contest', color: 'from-yellow-500 to-orange-600' },
+    { name: 'CodeChef', url: 'https://www.codechef.com/contests', color: 'from-amber-500 to-amber-600' },
+    { name: 'AtCoder', url: 'https://atcoder.jp/contests', color: 'from-gray-600 to-gray-700' },
+  ]; */}
 
+        </div>
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-900">

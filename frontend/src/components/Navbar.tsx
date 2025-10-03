@@ -16,6 +16,8 @@ export default function Navbar() {
     { href: '/system-design', label: 'System Design' },
     { href: '/operating-system', label: 'OS' },
     { href: '/notes', label: 'Notes' },
+    { href: '/quiz', label: 'Quiz' },
+    { href: '/certificate', label: 'Certificate' },
   ];
 
   return (

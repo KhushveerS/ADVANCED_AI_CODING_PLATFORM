@@ -200,6 +200,47 @@ app.get('/api/dsa/topics', (req: express.Request, res: express.Response) => {
   });
 });
 
+// Certificate Verification Endpoint
+app.get('/api/certificate/verify/:id', (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params;
+    
+    // In a real application, this would query a database
+    // For this demo, we'll simulate verification
+    if (id && id.startsWith('CERT-2025-')) {
+      // Valid certificate format
+      res.json({
+        success: true,
+        verified: true,
+        certificate: {
+          id,
+          studentName: 'Alex Johnson',
+          courseName: 'DSA Fundamentals Quiz',
+          completionDate: 'October 15, 2025',
+          score: '92%',
+          instructorName: 'Dr. Sarah Williams',
+          issuedDate: 'October 15, 2025',
+          verificationDate: new Date().toISOString()
+        }
+      });
+    } else {
+      // Invalid certificate
+      res.status(404).json({
+        success: false,
+        verified: false,
+        message: 'Certificate not found'
+      });
+    }
+  } catch (error) {
+    console.error('Certificate verification error:', error);
+    res.status(500).json({
+      success: false,
+      verified: false,
+      message: 'Verification failed'
+    });
+  }
+});
+
 // DSA Difficulties
 app.get('/api/dsa/difficulties', (req: express.Request, res: express.Response) => {
   const difficulties = ['easy', 'medium', 'hard'];

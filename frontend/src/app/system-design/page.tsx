@@ -88,10 +88,10 @@ export default function SystemDesignPage() {
   return (
     <div className="min-h-screen">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-white  bg-gradient-to-r from-orange-400 to-red-500">
           System Design
         </h1>
-        <p className="text-gray-600">
+        <p className="text-white bg-gradient-to-r from-orange-400 to-red-500">
           Master system design concepts and prepare for technical interviews
         </p>
       </div>

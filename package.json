@@ -34,5 +34,9 @@
   "bugs": {
     "url": "https://github.com/KhushveerS/ADVANCED_AI_CODING_PLATFORM/issues"
   },
-  "homepage": "https://github.com/KhushveerS/ADVANCED_AI_CODING_PLATFORM#readme"
+  "homepage": "https://github.com/KhushveerS/ADVANCED_AI_CODING_PLATFORM#readme",
+  "dependencies": {
+    "reacr": "^1.0.0",
+    "react": "^19.2.0"
+  }
 }
